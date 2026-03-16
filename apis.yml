@@ -1,0 +1,70 @@
+aid: coredns
+name: CoreDNS
+description: >-
+  CoreDNS is a CNCF graduated DNS server written in Go that serves as the
+  default DNS service for Kubernetes clusters. It is flexible and extensible
+  through a plugin architecture, supporting DNS-based service discovery,
+  forwarding, caching, and integration with etcd, Kubernetes, and other
+  backends. CoreDNS can serve as an authoritative DNS server or a recursive
+  resolver.
+url: https://coredns.io
+image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+- DNS
+- Service Discovery
+- Kubernetes
+- Networking
+- Cloud Native
+- Graduated
+created: '2026-03-16'
+modified: '2026-03-16'
+specificationVersion: '0.19'
+type: Index
+apis:
+- aid: coredns:coredns-dns-api
+  name: CoreDNS DNS Interface
+  description: >-
+    CoreDNS implements the standard DNS protocol (RFC 1035) serving both
+    UDP and TCP queries. In Kubernetes, it resolves service names to cluster
+    IPs, headless services to pod IPs, and supports SRV records for port
+    discovery. The Kubernetes plugin watches the API server for service and
+    endpoint changes to keep DNS records current.
+  humanURL: https://coredns.io/manual/toc/
+  properties:
+  - type: Documentation
+    url: https://coredns.io/manual/toc/
+  tags:
+  - DNS
+  - Service Discovery
+  - Kubernetes
+- aid: coredns:coredns-plugin-api
+  name: CoreDNS Plugin API
+  description: >-
+    The CoreDNS plugin framework allows extending DNS server functionality
+    through a chain of plugins defined in the Corefile configuration.
+    External plugins can be written in Go to add custom DNS record sources,
+    filtering, metrics, and middleware. Each plugin implements the Handler
+    interface to process DNS requests.
+  humanURL: https://coredns.io/explugins/
+  properties:
+  - type: Documentation
+    url: https://coredns.io/explugins/
+  tags:
+  - Plugins
+  - Extensibility
+common:
+- type: Documentation
+  name: CoreDNS Manual
+  description: Official CoreDNS documentation and manual.
+  url: https://coredns.io/manual/toc/
+- type: GitHubOrg
+  name: CoreDNS GitHub
+  description: Source code for CoreDNS and plugins.
+  url: https://github.com/coredns
+- type: Blog
+  name: CoreDNS Blog
+  description: Project blog with announcements and updates.
+  url: https://coredns.io/blog/
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
