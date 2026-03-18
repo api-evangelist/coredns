@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/api-evangelist/coredns/blob/main/json-schema/coredns-corefile-schema.json",
+  "title": "CoreDNS Corefile Configuration",
+  "description": "JSON representation of a CoreDNS Corefile configuration. The Corefile defines server blocks (zone and port bindings) each containing an ordered list of plugins that process DNS queries. This schema captures the structure for tooling and validation purposes.",
+  "type": "object",
+  "required": ["servers"],
+  "properties": {
+    "servers": {
+      "type": "array",
+      "description": "Array of server blocks. Each server block binds to one or more zones and ports and defines a plugin chain for processing DNS queries.",
+      "items": {
+        "$ref": "#/$defs/ServerBlock"
+      },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "ServerBlock": {
+      "type": "object",
+      "title": "ServerBlock",
+      "description": "A CoreDNS server block that binds a set of zones and ports to an ordered plugin chain. Corresponds to a stanza like '. { ... }' or 'example.com:53 { ... }' in the Corefile.",
+      "required": ["zones", "plugins"],
+      "properties": {
+        "zones": {
+          "type": "array",
+          "description": "One or more DNS zones and optional port specifiers this server block handles. Use '.' for the root zone to catch all queries.",
+          "items": {
+            "type": "string",
+            "description": "DNS zone name with optional port (e.g., '.', 'example.com', 'cluster.local:53').",
+            "examples": [".", "example.com", "cluster.local:53", "0.0.0.0:5300"]
+          },
+          "minItems": 1
+        },
+        "plugins": {
+          "type": "array",
+          "description": "Ordered list of plugin configurations in this server block. Plugins are executed in the order listed for each DNS query.",
+          "items": {
+            "$ref": "#/$defs/PluginConfig"
+          }
+        }
+      }
+    },
+    "PluginConfig": {
+      "type": "object",
+      "title": "PluginConfig",
+      "description": "Configuration for a single CoreDNS plugin within a server block. The name identifies the plugin; args and options provide its configuration.",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The plugin name as it appears in the Corefile (e.g., 'kubernetes', 'forward', 'cache', 'log', 'errors', 'health', 'prometheus', 'ready', 'hosts', 'file', 'etcd', 'rewrite').",
+          "examples": ["kubernetes", "forward", "cache", "log", "errors", "health", "prometheus", "ready", "hosts", "file", "etcd", "rewrite", "loadbalance", "whoami", "template"]
+        },
+        "args": {
+          "type": "array",
+          "description": "Positional arguments passed to the plugin on the same line as the plugin name in the Corefile.",
+          "items": {
+            "type": "string",
+            "description": "A positional argument value."
+          }
+        },
+        "options": {
+          "type": "object",
+          "description": "Named options in the plugin's block body as key-value pairs.",
+          "additionalProperties": {
+            "oneOf": [
+              {"type": "string"},
+              {"type": "number"},
+              {"type": "boolean"},
+              {"type": "array", "items": {"type": "string"}}
+            ]
+          }
+        }
+      }
+    },
+    "KubernetesPlugin": {
+      "type": "object",
+      "title": "KubernetesPlugin",
+      "description": "Configuration for the CoreDNS kubernetes plugin, which serves DNS records for Kubernetes services and pods by watching the Kubernetes API server.",
+      "properties": {
+        "cluster_domain": {
+          "type": "string",
+          "description": "The cluster domain suffix used for service DNS records.",
+          "default": "cluster.local",
+          "example": "cluster.local"
+        },
+        "namespaces": {
+          "type": "array",
+          "description": "Limit DNS responses to specific Kubernetes namespaces. If empty, all namespaces are served.",
+          "items": {
+            "type": "string",
+            "description": "Kubernetes namespace name."
+          }
+        },
+        "pods": {
+          "type": "string",
+          "description": "Pod name resolution mode. 'disabled' skips pod DNS, 'insecure' enables pod IP to name lookups without verification, 'verified' checks that the pod IP matches the expected pod.",
+          "enum": ["disabled", "insecure", "verified"],
+          "default": "disabled"
+        },
+        "endpoint_pod_names": {
+          "type": "boolean",
+          "description": "If true, use pod names instead of pod IPs as the hostname in endpoint DNS records for headless services.",
+          "default": false
+        },
+        "ttl": {
+          "type": "integer",
+          "description": "TTL in seconds for DNS records served by the kubernetes plugin.",
+          "minimum": 0,
+          "maximum": 3600,
+          "default": 5
+        },
+        "noendpoints": {
+          "type": "boolean",
+          "description": "If true, disable endpoint DNS records (used when EndpointSlices are not available).",
+          "default": false
+        },
+        "fallthrough": {
+          "type": "array",
+          "description": "Zones for which queries are passed to the next plugin if no match is found.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kubeconfig": {
+          "type": "string",
+          "description": "Path to a kubeconfig file for out-of-cluster operation."
+        }
+      }
+    },
+    "ForwardPlugin": {
+      "type": "object",
+      "title": "ForwardPlugin",
+      "description": "Configuration for the CoreDNS forward plugin, which proxies DNS queries to upstream resolvers.",
+      "required": ["upstreams"],
+      "properties": {
+        "upstreams": {
+          "type": "array",
+          "description": "List of upstream DNS server addresses to forward queries to.",
+          "items": {
+            "type": "string",
+            "description": "Upstream resolver address (e.g., '8.8.8.8', '8.8.4.4', 'tls://1.1.1.1').",
+            "examples": ["8.8.8.8", "8.8.4.4", "tls://1.1.1.1", "/etc/resolv.conf"]
+          },
+          "minItems": 1
+        },
+        "policy": {
+          "type": "string",
+          "description": "Load balancing policy for selecting an upstream when multiple are configured.",
+          "enum": ["random", "round_robin", "sequential"],
+          "default": "random"
+        },
+        "health_check": {
+          "type": "string",
+          "description": "Interval for health checking upstream resolvers (e.g., '5s', '1m').",
+          "pattern": "^[0-9]+(ns|us|ms|s|m|h)$"
+        },
+        "max_fails": {
+          "type": "integer",
+          "description": "Number of consecutive health check failures before an upstream is considered unhealthy.",
+          "minimum": 0,
+          "default": 2
+        },
+        "tls_servername": {
+          "type": "string",
+          "description": "Server name for TLS verification when using DNS-over-TLS upstreams."
+        },
+        "expire": {
+          "type": "string",
+          "description": "Duration after which a cached upstream connection expires.",
+          "pattern": "^[0-9]+(ns|us|ms|s|m|h)$"
+        },
+        "max_concurrent": {
+          "type": "integer",
+          "description": "Maximum number of concurrent queries to all upstreams combined.",
+          "minimum": 1
+        }
+      }
+    },
+    "CachePlugin": {
+      "type": "object",
+      "title": "CachePlugin",
+      "description": "Configuration for the CoreDNS cache plugin, which caches DNS responses to reduce upstream load.",
+      "properties": {
+        "ttl": {
+          "type": "integer",
+          "description": "Maximum TTL in seconds for positive responses in the cache.",
+          "minimum": 0,
+          "default": 3600
+        },
+        "negative_ttl": {
+          "type": "integer",
+          "description": "Maximum TTL in seconds for negative (NXDOMAIN/NODATA) responses.",
+          "minimum": 0,
+          "default": 900
+        },
+        "capacity": {
+          "type": "integer",
+          "description": "Maximum number of cache entries. Defaults to 10000.",
+          "minimum": 1,
+          "default": 10000
+        },
+        "prefetch": {
+          "type": "integer",
+          "description": "Prefetch DNS records when they reach this percentage of their TTL remaining. Value is between 1 and 99.",
+          "minimum": 1,
+          "maximum": 99
+        },
+        "serve_stale": {
+          "type": "string",
+          "description": "Duration for which stale cache entries may be served while a refresh is in progress (e.g., '5s').",
+          "pattern": "^[0-9]+(ns|us|ms|s|m|h)$"
+        }
+      }
+    }
+  }
+}

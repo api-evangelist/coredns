@@ -1,0 +1,129 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "coredns": "https://coredns.io/plugins/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "dns": "https://www.iana.org/assignments/dns-parameters/",
+
+    "ServerBlock": {
+      "@id": "schema:WebAPI",
+      "@context": {
+        "zones": {
+          "@id": "schema:serviceArea",
+          "@container": "@set"
+        },
+        "plugins": {
+          "@id": "schema:hasPart",
+          "@container": "@set"
+        }
+      }
+    },
+
+    "Plugin": {
+      "@id": "schema:SoftwareApplication",
+      "@context": {
+        "name": "schema:name",
+        "args": {
+          "@id": "schema:parameter",
+          "@container": "@set"
+        },
+        "options": "schema:additionalProperty"
+      }
+    },
+
+    "DNSRecord": {
+      "@id": "dns:resource-record-types",
+      "@context": {
+        "name": {
+          "@id": "schema:name",
+          "@type": "xsd:string"
+        },
+        "type": {
+          "@id": "dns:resource-record-types",
+          "@type": "xsd:string"
+        },
+        "ttl": {
+          "@id": "schema:duration",
+          "@type": "xsd:integer"
+        },
+        "rdata": "schema:value",
+        "zone": {
+          "@id": "schema:isPartOf",
+          "@type": "xsd:string"
+        }
+      }
+    },
+
+    "Zone": {
+      "@id": "schema:WebAPI",
+      "@context": {
+        "origin": {
+          "@id": "schema:identifier",
+          "@type": "xsd:string"
+        },
+        "ttl": {
+          "@id": "schema:duration",
+          "@type": "xsd:integer"
+        },
+        "records": {
+          "@id": "schema:hasPart",
+          "@container": "@set"
+        }
+      }
+    },
+
+    "ForwardConfig": {
+      "@id": "coredns:forward",
+      "@context": {
+        "upstreams": {
+          "@id": "schema:serviceUrl",
+          "@container": "@set"
+        },
+        "policy": "schema:actionOption",
+        "health_check": "schema:duration",
+        "max_fails": "schema:numberOfItems",
+        "tls_servername": "schema:hostName"
+      }
+    },
+
+    "CacheConfig": {
+      "@id": "coredns:cache",
+      "@context": {
+        "ttl": "schema:duration",
+        "negative_ttl": "schema:duration",
+        "capacity": "schema:numberOfItems"
+      }
+    },
+
+    "KubernetesConfig": {
+      "@id": "coredns:kubernetes",
+      "@context": {
+        "cluster_domain": {
+          "@id": "schema:domainIncludes",
+          "@type": "xsd:string"
+        },
+        "namespaces": {
+          "@id": "schema:isPartOf",
+          "@container": "@set"
+        },
+        "ttl": "schema:duration",
+        "pods": "schema:actionOption"
+      }
+    },
+
+    "MetricSample": {
+      "@id": "schema:DataFeedItem",
+      "@context": {
+        "name": "schema:name",
+        "value": "schema:value",
+        "labels": "schema:additionalProperty",
+        "timestamp": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        }
+      }
+    }
+  }
+}

@@ -17,7 +17,7 @@ tags:
 - Cloud Native
 - Graduated
 created: '2026-03-16'
-modified: '2026-03-16'
+modified: '2026-03-18'
 specificationVersion: '0.19'
 type: Index
 apis:
@@ -49,22 +49,67 @@ apis:
   properties:
   - type: Documentation
     url: https://coredns.io/explugins/
+  - type: Reference
+    url: https://coredns.io/manual/plugins/
   tags:
   - Plugins
   - Extensibility
+- aid: coredns:coredns-health-api
+  name: CoreDNS Health API
+  description: >-
+    The CoreDNS health plugin exposes an HTTP health check endpoint at
+    /health on port 8080 by default. It reports the overall health of the
+    CoreDNS process and is used by Kubernetes liveness and readiness probes
+    to determine if the DNS server is operational.
+  humanURL: https://coredns.io/plugins/health/
+  properties:
+  - type: Documentation
+    url: https://coredns.io/plugins/health/
+  - type: OpenAPI
+    url: openapi/coredns-health-openapi.yml
+  tags:
+  - Health Check
+  - Kubernetes
+  - Observability
+- aid: coredns:coredns-metrics-api
+  name: CoreDNS Metrics API
+  description: >-
+    The CoreDNS prometheus plugin exposes a Prometheus-compatible metrics
+    endpoint at /metrics on port 9153. It provides DNS request counters,
+    response size histograms, latency distributions, and build information
+    metrics for monitoring CoreDNS performance and behavior.
+  humanURL: https://coredns.io/plugins/metrics/
+  properties:
+  - type: Documentation
+    url: https://coredns.io/plugins/metrics/
+  - type: OpenAPI
+    url: openapi/coredns-metrics-openapi.yml
+  tags:
+  - Metrics
+  - Prometheus
+  - Observability
+  - Monitoring
 common:
+- type: JSONSchema
+  url: json-schema/coredns-corefile-schema.json
+- type: JSON-LD
+  url: json-ld/coredns-context.jsonld
+- type: Website
+  url: https://coredns.io/
 - type: Documentation
-  name: CoreDNS Manual
-  description: Official CoreDNS documentation and manual.
   url: https://coredns.io/manual/toc/
-- type: GitHubOrg
-  name: CoreDNS GitHub
-  description: Source code for CoreDNS and plugins.
+- type: Getting Started
+  url: https://coredns.io/2017/07/24/quick-start/
+- type: GitHub Organization
   url: https://github.com/coredns
+- type: GitHubRepository
+  url: https://github.com/coredns/coredns
 - type: Blog
-  name: CoreDNS Blog
-  description: Project blog with announcements and updates.
   url: https://coredns.io/blog/
+- type: Change Log
+  url: https://github.com/coredns/coredns/releases
+- type: Community
+  url: https://slack.cncf.io/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

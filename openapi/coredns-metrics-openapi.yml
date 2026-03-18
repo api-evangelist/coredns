@@ -1,0 +1,69 @@
+openapi: 3.1.0
+info:
+  title: CoreDNS Metrics API
+  description: >-
+    The CoreDNS prometheus plugin exposes a Prometheus-compatible metrics
+    endpoint at /metrics on port 9153 by default. It provides DNS request
+    counters broken down by server, zone, type, and rcode; response size
+    histograms; cache hit and miss counters; forward request counters; latency
+    distributions; and build information. These metrics are scraped by
+    Prometheus or compatible monitoring systems for observability into CoreDNS
+    performance and DNS query patterns.
+  version: '2.x'
+  contact:
+    name: CoreDNS Community
+    url: https://coredns.io/community/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+externalDocs:
+  description: CoreDNS Metrics Plugin Documentation
+  url: https://coredns.io/plugins/metrics/
+servers:
+  - url: http://localhost:9153
+    description: CoreDNS Prometheus metrics HTTP server (default port, configurable)
+tags:
+  - name: Metrics
+    description: >-
+      Prometheus-compatible metrics endpoints exposing DNS query statistics,
+      cache performance, latency histograms, and build information.
+paths:
+  /metrics:
+    get:
+      operationId: getMetrics
+      summary: Get Prometheus metrics
+      description: >-
+        Returns all CoreDNS metrics in Prometheus text exposition format
+        (version 0.0.4). The response includes counters, gauges, histograms,
+        and summaries covering DNS request rates by server and zone,
+        response code distributions, DNS query type breakdowns, cache hit
+        rates, panics, and plugin-specific metrics such as forward latency and
+        health check state. Requires the prometheus plugin to be configured in
+        the Corefile.
+      tags:
+        - Metrics
+      responses:
+        '200':
+          description: Prometheus text format metrics.
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: >-
+                  Prometheus exposition format text, one metric per line with
+                  HELP and TYPE comments followed by sample lines. Key metrics
+                  include coredns_dns_requests_total, coredns_dns_responses_total,
+                  coredns_dns_request_duration_seconds,
+                  coredns_cache_hits_total, coredns_cache_misses_total,
+                  coredns_forward_requests_total, and
+                  coredns_build_info.
+              example: |
+                # HELP coredns_build_info A metric with a constant '1' value labeled by version, revision, and goversion from which CoreDNS was built.
+                # TYPE coredns_build_info gauge
+                coredns_build_info{goversion="go1.21.0",revision="abcdef",version="1.11.1"} 1
+                # HELP coredns_dns_requests_total Counter of DNS requests made per zone, protocol and family.
+                # TYPE coredns_dns_requests_total counter
+                coredns_dns_requests_total{family="1",proto="udp",server="dns://:53",type="A",zone="."} 42
+                # HELP coredns_dns_request_duration_seconds Histogram of the time (in seconds) each request took per zone.
+                # TYPE coredns_dns_request_duration_seconds histogram
+                coredns_dns_request_duration_seconds_bucket{le="0.00025",server="dns://:53",type="A",zone="."} 10
