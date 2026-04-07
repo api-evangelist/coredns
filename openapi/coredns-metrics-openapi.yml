@@ -31,7 +31,7 @@ paths:
   /metrics:
     get:
       operationId: getMetrics
-      summary: Get Prometheus metrics
+      summary: CoreDNS Get Prometheus metrics
       description: >-
         Returns all CoreDNS metrics in Prometheus text exposition format
         (version 0.0.4). The response includes counters, gauges, histograms,
