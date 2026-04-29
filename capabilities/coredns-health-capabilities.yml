@@ -1,0 +1,56 @@
+name: CoreDNS Health Capabilities
+description: >-
+  Workflow capabilities exposed by the CoreDNS health and ready plugins for
+  Kubernetes liveness and readiness probing and graceful shutdown.
+url: https://coredns.io/plugins/health/
+version: '1.0'
+modified: '2026-04-28'
+api: CoreDNS Health API
+baseURL: http://localhost:8080
+capabilities:
+  - name: Liveness Probing
+    description: >-
+      Probe the /health endpoint to verify the CoreDNS process is alive and
+      not in lameduck mode.
+    operations:
+      - getHealth
+    inputs:
+      - probe interval
+    outputs:
+      - HTTP 200 OK when alive
+      - HTTP 503 during lameduck shutdown
+  - name: Readiness Probing
+    description: >-
+      Probe the /ready endpoint to verify all CoreDNS plugins implementing
+      the Readiness interface have completed initialization.
+    operations:
+      - getReadiness
+    inputs:
+      - probe interval
+    outputs:
+      - HTTP 200 OK when ready
+      - HTTP 503 when initializing
+  - name: Graceful Shutdown Signaling
+    description: >-
+      Use lameduck mode to signal load balancers and orchestrators to drain
+      traffic before terminating CoreDNS instances.
+    operations:
+      - getHealth
+    inputs:
+      - lameduck duration
+    outputs:
+      - HTTP 503 lameduck response
+useCases:
+  - name: Kubernetes Liveness Probe
+    description: Configure kubelet liveness probes to call /health and restart unhealthy CoreDNS pods.
+    capabilities:
+      - Liveness Probing
+  - name: Kubernetes Readiness Probe
+    description: Gate Service traffic on /ready to prevent routing to pods that have not finished initializing.
+    capabilities:
+      - Readiness Probing
+  - name: Rolling Updates
+    description: Enable lameduck on SIGTERM to drain DNS traffic during rolling restarts.
+    capabilities:
+      - Graceful Shutdown Signaling
+      - Liveness Probing

@@ -1,0 +1,67 @@
+extends: ["spectral:oas"]
+documentationUrl: https://coredns.io/plugins/metrics/
+rules:
+  coredns-metrics-info-license:
+    description: API info object should declare Apache 2.0.
+    given: "$.info.license"
+    severity: error
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        match: "Apache"
+  coredns-metrics-port-9153:
+    description: Servers should reference port 9153 (default Prometheus metrics port).
+    given: "$.servers[*].url"
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        match: ":9153"
+  coredns-metrics-path:
+    description: API must define the /metrics path.
+    given: "$.paths"
+    severity: error
+    then:
+      field: /metrics
+      function: truthy
+  coredns-metrics-get-only:
+    description: The /metrics endpoint must only support GET.
+    given: "$.paths['/metrics']"
+    severity: error
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            get:
+              type: object
+          additionalProperties: false
+  coredns-metrics-prometheus-response:
+    description: 200 response should return text/plain Prometheus exposition format.
+    given: "$.paths['/metrics'].get.responses.200.content"
+    severity: warn
+    then:
+      field: text/plain
+      function: truthy
+  coredns-metrics-operation-id:
+    description: Operations must define an operationId.
+    given: "$.paths.*.get"
+    severity: error
+    then:
+      field: operationId
+      function: truthy
+  coredns-metrics-tags:
+    description: Operations must define tags.
+    given: "$.paths.*.get"
+    severity: error
+    then:
+      field: tags
+      function: truthy
+  coredns-metrics-no-auth:
+    description: Metrics endpoint typically does not require authentication; consider documenting this.
+    given: "$.paths['/metrics'].get"
+    severity: info
+    then:
+      function: truthy

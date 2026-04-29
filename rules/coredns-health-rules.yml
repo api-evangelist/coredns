@@ -1,0 +1,73 @@
+extends: ["spectral:oas"]
+documentationUrl: https://coredns.io/plugins/health/
+rules:
+  coredns-health-info-license:
+    description: API info object should include Apache 2.0 license.
+    given: "$.info.license"
+    severity: error
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        match: "Apache"
+  coredns-health-server-localhost:
+    description: Servers should reference the localhost CoreDNS health endpoint.
+    given: "$.servers[*].url"
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        match: "localhost"
+  coredns-health-paths:
+    description: API must define /health and /ready paths.
+    given: "$.paths"
+    severity: error
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required:
+            - /health
+            - /ready
+  coredns-health-get-only:
+    description: Health and readiness endpoints must only support GET.
+    given: "$.paths['/health','/ready']"
+    severity: error
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            get:
+              type: object
+          additionalProperties: false
+  coredns-health-text-plain-response:
+    description: Health and readiness 200 responses should return text/plain.
+    given: "$.paths['/health','/ready'].get.responses.200.content"
+    severity: warn
+    then:
+      field: text/plain
+      function: truthy
+  coredns-health-503-response:
+    description: Health and readiness endpoints should document 503 responses.
+    given: "$.paths['/health','/ready'].get.responses"
+    severity: error
+    then:
+      field: '503'
+      function: truthy
+  coredns-health-operation-id:
+    description: Operations must define an operationId.
+    given: "$.paths.*.get"
+    severity: error
+    then:
+      field: operationId
+      function: truthy
+  coredns-health-tags:
+    description: Operations must define tags.
+    given: "$.paths.*.get"
+    severity: error
+    then:
+      field: tags
+      function: truthy

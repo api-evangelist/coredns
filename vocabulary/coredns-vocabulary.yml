@@ -1,0 +1,73 @@
+name: CoreDNS Vocabulary
+description: >-
+  Controlled vocabulary of CoreDNS concepts, plugin types, configuration
+  primitives, and observability resources.
+url: https://coredns.io/manual/toc/
+version: '1.0'
+modified: '2026-04-28'
+concepts:
+  - name: Corefile
+    description: The CoreDNS configuration file that declares server blocks, listeners, and an ordered list of plugins.
+  - name: Plugin
+    description: A unit of DNS server functionality compiled into the CoreDNS binary that implements the Handler interface.
+  - name: External Plugin
+    description: A plugin not bundled with the default CoreDNS binary that must be compiled in via plugin.cfg.
+  - name: Server Block
+    description: A Corefile section that binds zones, ports, and protocols to a chain of plugins.
+  - name: Zone
+    description: A DNS namespace served by a particular server block (e.g., cluster.local).
+  - name: Plugin Chain
+    description: The ordered sequence of plugins that DNS queries flow through during handling.
+  - name: Lameduck Mode
+    description: A graceful shutdown state where /health returns 503 to drain traffic before exit.
+  - name: Readiness
+    description: The condition where all plugins implementing the Readiness interface report ready to serve.
+  - name: DNS-over-TLS (DoT)
+    description: DNS resolution over TLS-encrypted TCP connections per RFC 7858.
+  - name: DNS-over-HTTPS (DoH)
+    description: DNS resolution over HTTPS per RFC 8484.
+  - name: DNS-over-QUIC (DoQ)
+    description: DNS resolution over QUIC per RFC 9250.
+endpoints:
+  - name: /health
+    description: Liveness probe HTTP endpoint exposed by the health plugin on port 8080.
+  - name: /ready
+    description: Readiness probe HTTP endpoint exposed by the ready plugin on port 8080.
+  - name: /metrics
+    description: Prometheus metrics scrape endpoint exposed by the prometheus plugin on port 9153.
+metrics:
+  - name: coredns_dns_requests_total
+    description: Counter of DNS requests received by CoreDNS partitioned by zone, type, and protocol.
+  - name: coredns_dns_responses_total
+    description: Counter of DNS responses sent by CoreDNS partitioned by zone and rcode.
+  - name: coredns_dns_request_duration_seconds
+    description: Histogram of DNS request handling latencies.
+  - name: coredns_dns_request_size_bytes
+    description: Histogram of inbound DNS request sizes in bytes.
+  - name: coredns_dns_response_size_bytes
+    description: Histogram of outbound DNS response sizes in bytes.
+  - name: coredns_build_info
+    description: Build metadata gauge with version, revision, goversion labels.
+plugins:
+  - name: kubernetes
+    description: Resolves Kubernetes service and pod DNS names by watching the Kubernetes API server.
+  - name: forward
+    description: Forwards DNS queries to upstream resolvers.
+  - name: cache
+    description: Caches DNS responses in memory.
+  - name: prometheus
+    description: Exposes Prometheus-compatible metrics for the CoreDNS process.
+  - name: health
+    description: Exposes the /health liveness HTTP endpoint.
+  - name: ready
+    description: Exposes the /ready readiness HTTP endpoint.
+  - name: file
+    description: Serves zone data from a zone file on disk.
+  - name: etcd
+    description: Reads zone data from an etcd cluster.
+  - name: rewrite
+    description: Rewrites DNS query names and types based on configurable rules.
+  - name: log
+    description: Logs DNS queries and responses.
+  - name: errors
+    description: Logs error responses and counts.
