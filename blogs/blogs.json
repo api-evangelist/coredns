@@ -1,0 +1,13 @@
+{
+  "repo": "coredns",
+  "feeds": [
+    {
+      "source": "https://coredns.io/blog/",
+      "feed_url": "https://coredns.io/blog/index.xml",
+      "saved": 10,
+      "title": "Blogs on CoreDNS: DNS and Service Discovery"
+    }
+  ],
+  "post_count": 10,
+  "fetched": "2026-05-03T23:26:10Z"
+}
