@@ -4,108 +4,58 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: CoreDNS
 providerId: coredns
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: false
 tags:
-  - Apache 2.0
   - Cloud Native
-  - CNCF
   - DNS
-  - Go
-  - Graduated
   - Kubernetes
   - Networking
   - Open Source
-  - Plugins
-  - Prometheus
   - Service Discovery
   - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the CoreDNS API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
-headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
-responseCodes:
-  throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
+description: CoreDNS is a self-hosted DNS server. It does not expose a public hosted API with provider-imposed
+  per-second request limits. The HTTP Health (port 8080) and Prometheus Metrics (port 9153) endpoints
+  are intended for in-cluster operations and have no upstream-imposed rate limit; effective limits
+  are bounded by the operator's deployment topology and node CPU. CoreDNS does, however, ship plugins
+  (ratelimit, bufsize, cache) that operators can configure to throttle DNS query throughput.
+sources:
+  - https://coredns.io/manual/toc/
+  - https://coredns.io/explugins/ratelimit/
+  - https://coredns.io/plugins/cache/
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - CoreDNS DNS Interface
-      - CoreDNS Plugin API
-      - CoreDNS Health API
-      - CoreDNS Metrics API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - CoreDNS DNS Interface
-      - CoreDNS Plugin API
-      - CoreDNS Health API
-      - CoreDNS Metrics API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - CoreDNS DNS Interface
-      - CoreDNS Plugin API
-      - CoreDNS Health API
-      - CoreDNS Metrics API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - CoreDNS DNS Interface
-      - CoreDNS Plugin API
-      - CoreDNS Health API
-      - CoreDNS Metrics API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - CoreDNS DNS Interface
-      - CoreDNS Plugin API
-      - CoreDNS Health API
-      - CoreDNS Metrics API
+  - name: DNS query rate
+    scope: deployment
+    metric: queries_per_second
+    limit: operator-configured
+    notes: Bounded by node CPU and configured via the optional ratelimit plugin. No upstream-imposed
+      number.
+  - name: Health endpoint
+    scope: deployment
+    metric: requests_per_second
+    limit: not enforced
+    notes: HTTP /health on port 8080 is intended for kubelet liveness/readiness probes; CoreDNS does
+      not throttle it.
+  - name: Metrics endpoint
+    scope: deployment
+    metric: requests_per_second
+    limit: not enforced
+    notes: HTTP /metrics on port 9153 is intended for Prometheus scraping; CoreDNS does not throttle
+      it.
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  - name: Operator-configured throttling
+    description: Use the ratelimit plugin (external) to apply per-source rate limits to DNS queries.
+      Configure cache and bufsize plugins to absorb bursts and reduce upstream load.
+  - name: No hosted API
+    description: CoreDNS is run by the operator inside their cluster or environment. There is no provider-hosted
+      DNS endpoint and therefore no provider-imposed rate limit.
+  - name: Backoff for clients
+    description: DNS clients should respect SERVFAIL and REFUSED responses and back off rather than
+      hot-looping; the cache plugin can be tuned to reduce load when SERVFAIL spikes.
+notes: CoreDNS is open-source and self-hosted, so there is no provider-imposed rate limit. Reconciled
+  is false because there is no provider rate-limit document to reconcile against; this artifact captures
+  the rate-limiting capabilities CoreDNS exposes to operators rather than limits applied to a hosted
+  CoreDNS API.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
