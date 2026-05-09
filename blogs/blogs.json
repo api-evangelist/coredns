@@ -4,10 +4,10 @@
     {
       "source": "https://coredns.io/blog/",
       "feed_url": "https://coredns.io/blog/index.xml",
-      "saved": 10,
-      "title": "Blogs on CoreDNS: DNS and Service Discovery"
+      "title": "Blogs on CoreDNS: DNS and Service Discovery",
+      "saved": 0
     }
   ],
   "post_count": 10,
-  "fetched": "2026-05-03T23:26:10Z"
+  "fetched": "2026-05-09T20:17:51Z"
 }
