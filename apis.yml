@@ -1,6 +1,6 @@
 aid: coredns
 name: CoreDNS
-x-type: opensource
+kind: opensource
 description: >-
   CoreDNS is a CNCF graduated DNS server written in Go that serves as the
   default DNS service for Kubernetes clusters. It is flexible and extensible
