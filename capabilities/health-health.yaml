@@ -1,0 +1,67 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: CoreDNS Health API — Health
+  description: 'CoreDNS Health API — Health. 1 operations. Lead operation: CoreDNS liveness health check. Self-contained Naftiko
+    capability covering one Coredns business surface.'
+  tags:
+  - Coredns
+  - Health
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    COREDNS_API_KEY: COREDNS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: health-health
+    baseUri: http://localhost:8080
+    description: CoreDNS Health API — Health business capability. Self-contained, no shared references.
+    resources:
+    - name: health
+      path: /health
+      operations:
+      - name: gethealth
+        method: GET
+        description: CoreDNS liveness health check
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: health-health-rest
+    port: 8080
+    description: REST adapter for CoreDNS Health API — Health. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/health
+      name: health
+      description: REST surface for health.
+      operations:
+      - method: GET
+        name: gethealth
+        description: CoreDNS liveness health check
+        call: health-health.gethealth
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: health-health-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for CoreDNS Health API — Health. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: coredns-liveness-health-check
+      description: CoreDNS liveness health check
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: health-health.gethealth
+      outputParameters:
+      - type: object
+        mapping: $.
