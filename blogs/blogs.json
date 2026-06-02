@@ -2,12 +2,20 @@
   "repo": "coredns",
   "feeds": [
     {
-      "source": "https://coredns.io/blog/",
+      "source": "https://coredns.io/blog/index.xml",
       "feed_url": "https://coredns.io/blog/index.xml",
-      "title": "Blogs on CoreDNS: DNS and Service Discovery",
-      "saved": 50
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://coredns.io/explugins/",
+      "feed_url": "https://coredns.io/explugins/index.xml",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
     }
   ],
   "post_count": 60,
-  "fetched": "2026-05-17T20:20:35Z"
+  "fetched": "2026-06-01T23:35:02Z"
 }
