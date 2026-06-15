@@ -1,0 +1,48 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CoreDNS Health API",
+    "version": "2.x"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "CoreDNS liveness health check",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/health"
+          },
+          "docs": "Returns the overall health status of the CoreDNS process. Returns HTTP 200 with body \"OK\" when CoreDNS is alive and healthy. Returns HTTP 503 during the lameduck shutdown period to signal that the instance is draining and should not receive new traffic. This endpoint is typically used as the Kubernetes liveness probe target."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Ready",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "CoreDNS readiness check",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/ready"
+          },
+          "docs": "Returns the readiness status of all CoreDNS plugins. Returns HTTP 200 with body \"OK\" when all plugins that implement the Readiness interface report they are ready to serve traffic. Returns HTTP 503 if any plugin is not yet ready. This endpoint is typically used as the Kubernetes readiness probe target and requires the ready plugin to be enabled in the Corefile."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
