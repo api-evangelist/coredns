@@ -9,6 +9,13 @@
       "method": "feed"
     },
     {
+      "source": "https://coredns.io/explugins/index.xml",
+      "feed_url": "https://coredns.io/explugins/index.xml",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://coredns.io/explugins/",
       "feed_url": "https://coredns.io/explugins/index.xml",
       "title": "",
@@ -16,6 +23,6 @@
       "method": "discovered"
     }
   ],
-  "post_count": 60,
-  "fetched": "2026-06-27T12:03:07Z"
+  "post_count": 105,
+  "fetched": "2026-07-11T11:50:51Z"
 }
