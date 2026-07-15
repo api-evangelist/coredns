@@ -109,6 +109,8 @@ apis:
       - Observability
       - Prometheus
 common:
+  - type: AgenticAccess
+    url: agentic-access/coredns-agentic-access.yml
   - type: DomainSecurity
     url: security/coredns-domain-security.yml
   - type: JSONSchema
