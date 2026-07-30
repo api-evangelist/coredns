@@ -8,7 +8,19 @@ description: >-
   or a recursive resolver, with HTTP plugins exposing health, readiness, and Prometheus metrics endpoints for Kubernetes
   operations.
 url: https://coredns.io
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: free
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Free
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/coredns.png
 tags:
   - Apache 2.0
   - Cloud Native
@@ -29,85 +41,119 @@ type: Index
 access: Public
 position: Provider
 apis:
-  - aid: coredns:coredns-dns-api
-    name: CoreDNS DNS Interface
-    description: >-
-      CoreDNS implements the standard DNS protocol (RFC 1035) serving both UDP and TCP queries. In Kubernetes, it
-      resolves service names to cluster IPs, headless services to pod IPs, and supports SRV records for port discovery.
-      The Kubernetes plugin watches the API server for service and endpoint changes to keep DNS records current.
-      Additional protocol bindings include DNS-over-TLS (DoT), DNS-over-HTTPS (DoH), DNS-over-QUIC (DoQ), and gRPC.
-    humanURL: https://coredns.io/manual/toc/
-    properties:
-      - type: Documentation
-        url: https://coredns.io/manual/toc/
-    tags:
-      - DNS
-      - DoH
-      - DoQ
-      - DoT
-      - Kubernetes
-      - Service Discovery
-  - aid: coredns:coredns-plugin-api
-    name: CoreDNS Plugin API
-    description: >-
-      The CoreDNS plugin framework allows extending DNS server functionality through a chain of plugins defined in the
-      Corefile configuration. External plugins can be written in Go to add custom DNS record sources, filtering,
-      metrics, and middleware. Each plugin implements the Handler interface to process DNS requests.
-    humanURL: https://coredns.io/explugins/
-    properties:
-      - type: Documentation
-        url: https://coredns.io/explugins/
-      - type: Reference
-        url: https://coredns.io/manual/plugins/
-    tags:
-      - Extensibility
-      - Plugins
-  - aid: coredns:coredns-health-api
-    name: CoreDNS Health API
-    description: >-
-      The CoreDNS health plugin exposes HTTP /health and /ready endpoints on port 8080 by default. It reports the
-      overall health and readiness of the CoreDNS process and is used by Kubernetes liveness and readiness probes to
-      determine if the DNS server is operational.
-    humanURL: https://coredns.io/plugins/health/
-    baseURL: http://localhost:8080
-    properties:
-      - type: Documentation
-        url: https://coredns.io/plugins/health/
-      - type: ReadyDocumentation
-        url: https://coredns.io/plugins/ready/
-      - type: OpenAPI
-        url: openapi/coredns-health-openapi.yml
-      - type: Rules
-        url: rules/coredns-health-rules.yml
-      - type: Capabilities
-        url: capabilities/coredns-health-capabilities.yml
-    tags:
-      - Health Check
-      - Kubernetes
-      - Observability
-      - Readiness
-  - aid: coredns:coredns-metrics-api
-    name: CoreDNS Metrics API
-    description: >-
-      The CoreDNS prometheus plugin exposes a Prometheus-compatible metrics endpoint at /metrics on port 9153. It
-      provides DNS request counters, response size histograms, latency distributions, and build information metrics for
-      monitoring CoreDNS performance and behavior.
-    humanURL: https://coredns.io/plugins/metrics/
-    baseURL: http://localhost:9153
-    properties:
-      - type: Documentation
-        url: https://coredns.io/plugins/metrics/
-      - type: OpenAPI
-        url: openapi/coredns-metrics-openapi.yml
-      - type: Rules
-        url: rules/coredns-metrics-rules.yml
-      - type: Capabilities
-        url: capabilities/coredns-metrics-capabilities.yml
-    tags:
-      - Metrics
-      - Monitoring
-      - Observability
-      - Prometheus
+- aid: coredns:coredns-dns-api
+  name: CoreDNS DNS Interface
+  description: >-
+    CoreDNS implements the standard DNS protocol (RFC 1035) serving both UDP and TCP queries. In Kubernetes,
+    it resolves service names to cluster IPs, headless services to pod IPs, and supports SRV records for
+    port discovery. The Kubernetes plugin watches the API server for service and endpoint changes to keep
+    DNS records current. Additional protocol bindings include DNS-over-TLS (DoT), DNS-over-HTTPS (DoH),
+    DNS-over-QUIC (DoQ), and gRPC.
+  humanURL: https://coredns.io/manual/toc/
+  properties:
+  - type: Documentation
+    url: https://coredns.io/manual/toc/
+  tags:
+  - DNS
+  - DoH
+  - DoQ
+  - DoT
+  - Kubernetes
+  - Service Discovery
+- aid: coredns:coredns-plugin-api
+  name: CoreDNS Plugin API
+  description: >-
+    The CoreDNS plugin framework allows extending DNS server functionality through a chain of plugins
+    defined in the Corefile configuration. External plugins can be written in Go to add custom DNS record
+    sources, filtering, metrics, and middleware. Each plugin implements the Handler interface to process
+    DNS requests.
+  humanURL: https://coredns.io/explugins/
+  properties:
+  - type: Documentation
+    url: https://coredns.io/explugins/
+  - type: Reference
+    url: https://coredns.io/manual/plugins/
+  tags:
+  - Extensibility
+  - Plugins
+- aid: coredns:coredns-health-api
+  name: CoreDNS Health API
+  description: >-
+    Health check endpoints used by Kubernetes liveness and readiness probes to assess the operational
+    state of the CoreDNS process.
+  humanURL: https://coredns.io/manual/toc/
+  baseURL: http://localhost:8080
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/coredns-health-api-openapi.yml
+  - type: Documentation
+    url: https://coredns.io/plugins/health/
+  - type: ReadyDocumentation
+    url: https://coredns.io/plugins/ready/
+  - type: Rules
+    url: rules/coredns-health-rules.yml
+  - type: Capabilities
+    url: capabilities/coredns-health-capabilities.yml
+  - type: Documentation
+    url: https://coredns.io/plugins/metrics/
+  - type: Rules
+    url: rules/coredns-metrics-rules.yml
+  - type: Capabilities
+    url: capabilities/coredns-metrics-capabilities.yml
+- aid: coredns:coredns-metrics-api
+  name: CoreDNS Metrics API
+  description: >-
+    Prometheus-compatible metrics endpoints exposing DNS query statistics, cache performance, latency
+    histograms, and build information.
+  humanURL: https://coredns.io/manual/toc/
+  baseURL: http://localhost:8080
+  tags:
+  - Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/coredns-metrics-api-openapi.yml
+  - type: Documentation
+    url: https://coredns.io/plugins/health/
+  - type: ReadyDocumentation
+    url: https://coredns.io/plugins/ready/
+  - type: Rules
+    url: rules/coredns-health-rules.yml
+  - type: Capabilities
+    url: capabilities/coredns-health-capabilities.yml
+  - type: Documentation
+    url: https://coredns.io/plugins/metrics/
+  - type: Rules
+    url: rules/coredns-metrics-rules.yml
+  - type: Capabilities
+    url: capabilities/coredns-metrics-capabilities.yml
+- aid: coredns:coredns-ready-api
+  name: CoreDNS Ready API
+  description: >-
+    Readiness check endpoints that indicate whether CoreDNS plugins have finished initializing and are
+    ready to serve DNS queries.
+  humanURL: https://coredns.io/manual/toc/
+  baseURL: http://localhost:8080
+  tags:
+  - Ready
+  properties:
+  - type: OpenAPI
+    url: openapi/coredns-ready-api-openapi.yml
+  - type: Documentation
+    url: https://coredns.io/plugins/health/
+  - type: ReadyDocumentation
+    url: https://coredns.io/plugins/ready/
+  - type: Rules
+    url: rules/coredns-health-rules.yml
+  - type: Capabilities
+    url: capabilities/coredns-health-capabilities.yml
+  - type: Documentation
+    url: https://coredns.io/plugins/metrics/
+  - type: Rules
+    url: rules/coredns-metrics-rules.yml
+  - type: Capabilities
+    url: capabilities/coredns-metrics-capabilities.yml
 common:
   - type: AgenticAccess
     url: agentic-access/coredns-agentic-access.yml
