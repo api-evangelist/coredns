@@ -1,0 +1,18 @@
+{
+  "provider": "coredns",
+  "sources": [
+    "coredns-health-api-openapi.yml",
+    "coredns-metrics-api-openapi.yml",
+    "coredns-ready-api-openapi.yml"
+  ],
+  "outputs": [
+    "coredns-health-api-openapi.yml",
+    "coredns-metrics-api-openapi.yml",
+    "coredns-ready-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
