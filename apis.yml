@@ -94,14 +94,10 @@ apis:
     url: https://coredns.io/plugins/ready/
   - type: Rules
     url: rules/coredns-health-rules.yml
-  - type: Capabilities
-    url: capabilities/coredns-health-capabilities.yml
   - type: Documentation
     url: https://coredns.io/plugins/metrics/
   - type: Rules
     url: rules/coredns-metrics-rules.yml
-  - type: Capabilities
-    url: capabilities/coredns-metrics-capabilities.yml
 - aid: coredns:coredns-metrics-api
   name: CoreDNS Metrics API
   description: >-
@@ -120,14 +116,10 @@ apis:
     url: https://coredns.io/plugins/ready/
   - type: Rules
     url: rules/coredns-health-rules.yml
-  - type: Capabilities
-    url: capabilities/coredns-health-capabilities.yml
   - type: Documentation
     url: https://coredns.io/plugins/metrics/
   - type: Rules
     url: rules/coredns-metrics-rules.yml
-  - type: Capabilities
-    url: capabilities/coredns-metrics-capabilities.yml
 - aid: coredns:coredns-ready-api
   name: CoreDNS Ready API
   description: >-
@@ -146,15 +138,19 @@ apis:
     url: https://coredns.io/plugins/ready/
   - type: Rules
     url: rules/coredns-health-rules.yml
-  - type: Capabilities
-    url: capabilities/coredns-health-capabilities.yml
   - type: Documentation
     url: https://coredns.io/plugins/metrics/
   - type: Rules
     url: rules/coredns-metrics-rules.yml
-  - type: Capabilities
-    url: capabilities/coredns-metrics-capabilities.yml
 common:
+  - type: IssueTracker
+    url: https://github.com/coredns/coredns/issues
+  - type: SecurityPolicy
+    url: https://github.com/coredns/coredns/blob/master/SECURITY.md
+  - type: CodeOfConduct
+    url: https://github.com/coredns/coredns/blob/master/.github/CODE_OF_CONDUCT.md
+  - type: ContributionGuide
+    url: https://github.com/coredns/coredns/blob/master/.github/CONTRIBUTING.md
   - type: AgenticAccess
     url: agentic-access/coredns-agentic-access.yml
   - type: DomainSecurity
