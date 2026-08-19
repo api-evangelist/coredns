@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CoreDNS Health Ready API",
+    "version": "2.x"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Ready",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "CoreDNS readiness check",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/ready"
+          },
+          "docs": "Returns the readiness status of all CoreDNS plugins. Returns HTTP 200 with body \"OK\" when all plugins that implement the Readiness interface report they are ready to serve traffic. Returns HTTP 503 if any plugin is not yet ready. This endpoint is typically used as the Kubernetes readiness probe target and requires the ready plugin to be enabled in the Corefile."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

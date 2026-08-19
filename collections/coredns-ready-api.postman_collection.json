@@ -1,0 +1,137 @@
+{
+  "item": [
+    {
+      "id": "e70525d1-1089-4a5a-af39-b4a0aa475b19",
+      "name": "Ready",
+      "description": {
+        "content": "Readiness check endpoints that indicate whether CoreDNS plugins have finished initializing and are ready to serve DNS queries.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7f3e94ff-a2ec-4c44-a3c3-fe5a6771d755",
+          "name": "CoreDNS readiness check",
+          "request": {
+            "name": "CoreDNS readiness check",
+            "description": {
+              "content": "Returns the readiness status of all CoreDNS plugins. Returns HTTP 200 with body \"OK\" when all plugins that implement the Readiness interface report they are ready to serve traffic. Returns HTTP 503 if any plugin is not yet ready. This endpoint is typically used as the Kubernetes readiness probe target and requires the ready plugin to be enabled in the Corefile.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ready"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d79eebc4-c91c-4e84-b61d-c6051dc80bfc",
+              "name": "All CoreDNS plugins are ready to serve traffic.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ready"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "OK",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d4379b81-8754-4cc7-be17-ca7ec47d56ff",
+              "name": "One or more CoreDNS plugins are not yet ready. The server is still initializing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ready"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "not ready",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:8080",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "93d6216e-011b-469a-baf1-1660762afe6e",
+    "name": "CoreDNS Health Ready API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The CoreDNS health plugin exposes an HTTP health check endpoint at /health on port 8080 by default. It reports the overall health of the CoreDNS process and is used by Kubernetes liveness and readiness probes to determine if the DNS server is operational. When lameduck mode is enabled, the health endpoint returns HTTP 503 for a configurable duration before shutdown to allow graceful traffic draining.\n\nContact Support:\n Name: CoreDNS Community",
+      "type": "text/plain"
+    }
+  }
+}

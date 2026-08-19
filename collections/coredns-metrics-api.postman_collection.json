@@ -1,0 +1,102 @@
+{
+  "item": [
+    {
+      "id": "f83e5c2c-9c0d-439b-9c9f-3ddd520dcc61",
+      "name": "Metrics",
+      "description": {
+        "content": "Prometheus-compatible metrics endpoints exposing DNS query statistics, cache performance, latency histograms, and build information.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2e744a51-b2c8-48a6-a764-a7bf39d2ba07",
+          "name": "CoreDNS Get Prometheus metrics",
+          "request": {
+            "name": "CoreDNS Get Prometheus metrics",
+            "description": {
+              "content": "Returns all CoreDNS metrics in Prometheus text exposition format (version 0.0.4). The response includes counters, gauges, histograms, and summaries covering DNS request rates by server and zone, response code distributions, DNS query type breakdowns, cache hit rates, panics, and plugin-specific metrics such as forward latency and health check state. Requires the prometheus plugin to be configured in the Corefile.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5e1c5c25-0b29-4372-97d1-1fa7e76ea661",
+              "name": "Prometheus text format metrics.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "# HELP coredns_build_info A metric with a constant '1' value labeled by version, revision, and goversion from which CoreDNS was built.\n# TYPE coredns_build_info gauge\ncoredns_build_info{goversion=\"go1.21.0\",revision=\"abcdef\",version=\"1.11.1\"} 1\n# HELP coredns_dns_requests_total Counter of DNS requests made per zone, protocol and family.\n# TYPE coredns_dns_requests_total counter\ncoredns_dns_requests_total{family=\"1\",proto=\"udp\",server=\"dns://:53\",type=\"A\",zone=\".\"} 42\n# HELP coredns_dns_request_duration_seconds Histogram of the time (in seconds) each request took per zone.\n# TYPE coredns_dns_request_duration_seconds histogram\ncoredns_dns_request_duration_seconds_bucket{le=\"0.00025\",server=\"dns://:53\",type=\"A\",zone=\".\"} 10\n",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:8080",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "b06a5f26-8ddf-4be7-9446-d587fe3976f6",
+    "name": "CoreDNS Health Metrics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The CoreDNS health plugin exposes an HTTP health check endpoint at /health on port 8080 by default. It reports the overall health of the CoreDNS process and is used by Kubernetes liveness and readiness probes to determine if the DNS server is operational. When lameduck mode is enabled, the health endpoint returns HTTP 503 for a configurable duration before shutdown to allow graceful traffic draining.\n\nContact Support:\n Name: CoreDNS Community",
+      "type": "text/plain"
+    }
+  }
+}
