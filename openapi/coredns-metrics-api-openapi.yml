@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: CoreDNS Health Metrics API
-  description: The CoreDNS health plugin exposes an HTTP health check endpoint at /health on port 8080 by default. It reports the overall health of the CoreDNS process and is used by Kubernetes liveness and readiness probes to determine if the DNS server is operational. When lameduck mode is enabled, the health endpoint returns HTTP 503 for a configurable duration before shutdown to allow graceful traffic draining.
+  title: CoreDNS Metrics API
+  description: The CoreDNS prometheus plugin exposes a Prometheus-compatible metrics endpoint at /metrics on port 9153 by default. It provides DNS request counters broken down by server, zone, type, and rcode; response size histograms; cache hit and miss counters; forward request counters; latency distributions; and build information. These metrics are scraped by Prometheus or compatible monitoring systems for observability into CoreDNS performance and DNS query patterns.
   version: 2.x
   contact:
     name: CoreDNS Community
@@ -10,8 +10,8 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
 servers:
-- url: http://localhost:8080
-  description: CoreDNS Health HTTP server (default port, configurable)
+- url: http://localhost:9153
+  description: CoreDNS Prometheus metrics HTTP server (default port, configurable)
 tags:
 - name: Metrics
   description: Prometheus-compatible metrics endpoints exposing DNS query statistics, cache performance, latency histograms, and build information.
@@ -51,5 +51,5 @@ paths:
 
                 '
 externalDocs:
-  description: CoreDNS Health Plugin Documentation
-  url: https://coredns.io/plugins/health/
+  description: CoreDNS Metrics Plugin Documentation
+  url: https://coredns.io/plugins/metrics/

@@ -1,18 +1,26 @@
 {
   "provider": "coredns",
   "sources": [
-    "coredns-health-api-openapi.yml",
-    "coredns-metrics-api-openapi.yml",
-    "coredns-ready-api-openapi.yml"
+    "_original/coredns-health-openapi.yml",
+    "_original/coredns-metrics-openapi.yml"
   ],
   "outputs": [
     "coredns-health-api-openapi.yml",
-    "coredns-metrics-api-openapi.yml",
-    "coredns-ready-api-openapi.yml"
+    "coredns-ready-api-openapi.yml",
+    "coredns-metrics-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "coredns-health-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "coredns-metrics-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "coredns-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coredns-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coredns-ready-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
